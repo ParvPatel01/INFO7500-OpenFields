@@ -3,6 +3,7 @@ import { NFT } from '../Model/NFTModel';
 import MarketImgViewer from './MarketImgViewer';
 import  Box  from '@mui/material/Box';
 import { Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 
 const Market = () => {
@@ -11,6 +12,8 @@ const Market = () => {
     const TOKEN_CONTRACT_ADDRESS = "0x812047A71cF17020b1c7e17dfA94e5EDD8Ba7916";
     const options = { method: 'GET', headers: { accept: 'application/json' } };
     const [nfts, setNfts] = useState<NFT[]>([]);
+    const location = useLocation();
+    const buyerAddress: string = location.state.address;
 
     useEffect(() => {
         fetch(`https://eth-sepolia.g.alchemy.com/nft/v3/${ALCHEMY_API_KEY}/getNFTsForContract?contractAddress=${CONTRACT_ADDRESS}&withMetadata=true`, options)
@@ -33,7 +36,7 @@ const Market = () => {
             <h2 style={{marginTop: '10px'}}>{`All NFTs (Contract: ${CONTRACT_ADDRESS})`}</h2>
             <Box className='nft-gallery' sx={{mt: 2}}>
                 {nfts.length > 0 ? (
-                    <MarketImgViewer nft={nfts} />
+                    <MarketImgViewer nft={nfts} contractAddress={CONTRACT_ADDRESS} buyerAddress={buyerAddress}/>
                 ) : (
                     <Typography variant='h3'>No NFTs found</Typography>
                 )}

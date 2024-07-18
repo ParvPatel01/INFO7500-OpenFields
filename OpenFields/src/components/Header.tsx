@@ -7,20 +7,20 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import { green } from '@mui/material/colors';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import GrassIcon from '@mui/icons-material/Grass';
-import PersonIcon from '@mui/icons-material/Person';
 import { useNavigate } from 'react-router-dom';
 
 const pages = ['Market', 'Mint'];
 
-function Header() {
+function Header(props: any) {
     const navigate = useNavigate();
     const routeChange = (path: string) => {
+        if (path === 'Market') {
+            navigate(path, {state: {address: props.account.address}});
+            return;
+        }
         navigate(path);
     }
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -120,12 +120,6 @@ function Header() {
                                 {page}
                             </Button>
                         ))}
-                    </Box>
-
-                    <Box sx={{ flexGrow: 0 }} onClick={() => routeChange('profile')}>
-                        <Avatar sx={{ bgcolor: green[500] }}>
-                            <PersonIcon />
-                        </Avatar>
                     </Box>
                 </Toolbar>
             </Container>

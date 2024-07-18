@@ -4,6 +4,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import { NFT } from '../Model/NFTModel';
+import {MarketPriceBtn} from './MarketPriceBtn';
 
 
 
@@ -26,6 +27,7 @@ export default function MarketImgViewer(props: any) {
               loading="lazy"
             />}
             <ImageListItemBar position="below" sx={{fontSize: '2em', fontWeight: 800}} title={`${item.name} #${item.tokenId}`}  />
+            <MarketPriceBtn tokenId={item.tokenId} contractAddress={props.contractAddress} buyerAddress={props.buyerAddress}/>
           </ImageListItem>
         ))}
       </ImageList>

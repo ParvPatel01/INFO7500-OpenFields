@@ -12,15 +12,11 @@ const routes = createBrowserRouter([
         children: [
             {
                 path: '/market',
-                Component: Market
+                Component: Market,
             },
             {
                 path: "/mint",
                 Component: Mint
-            },
-            {
-                path: "/profile",
-                Component: Profile
             }
 
         ]
