@@ -10,7 +10,7 @@ import {MarketPriceBtn} from './MarketPriceBtn';
 
 export default function MarketImgViewer(props: any) {
   return (
-    <Box sx={{ width: '100vw', height: '50vh', overflowY: 'scroll' }}>
+    <Box sx={{ width: '100vw', height: '50vh' }}>
       <ImageList variant="masonry" cols={5} gap={8}>
         {props.nft.map((item: NFT) => (
           <ImageListItem sx={{

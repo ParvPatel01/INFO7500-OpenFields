@@ -51,7 +51,7 @@ export default function Profile(props: ProfileProps) {
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                <DialogTitle sx={{ m: 0, p: 2, bgcolor: cyan[800], color: 'white' }} id="customized-dialog-title">
                     Account
                 </DialogTitle>
                 <IconButton
@@ -61,12 +61,12 @@ export default function Profile(props: ProfileProps) {
                         position: 'absolute',
                         right: 8,
                         top: 8,
-                        color: (theme) => theme.palette.grey[500],
+                        color: 'white',
                     }}
                 >
                     <CloseIcon />
                 </IconButton>
-                <DialogContent dividers>
+                <DialogContent sx={{ p: 2, bgcolor: '#292828', color: 'white' }} dividers>
                     <div className="personal">
                         <div className='account'>
                             <div className='account-info'>

@@ -8,6 +8,8 @@ import erc20abi from "../ABIs/ERC20ABI.json";
 import { useEffect, useState } from "react";
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import React from "react";
+import { cyan, green } from '@mui/material/colors';
+import { Button } from "@mui/material";
 const TOKEN_CONTRACT_ADDRESS = "0x49fBFE1517b34D9eFd01F9e37A9400B2e00AA376";
 
 interface Props {
@@ -26,7 +28,7 @@ export function MarketPriceBtn({
     buyerAddress,
 }: Props) {
     const {
-        data,
+        data: symbol,
         error,
         isPending,
     } = useReadContract({
@@ -47,9 +49,8 @@ export function MarketPriceBtn({
     const { vertical, horizontal, open } = state;
     const [errorMessage, SetErrorMessage] = useState("");
 
-    const displayPrice = `1 USDC`;
-    const approvePrice = `${('0' + 2n).toString()}000000000000000000`;
-    console.log("price", approvePrice);
+    const displayPrice = `1 ${symbol}`;
+    const approvePrice = `${('0' + 0n).toString()}000000000000000000`;
 
     // if (isPending) return <div>Loading...</div>;
 
@@ -66,15 +67,21 @@ export function MarketPriceBtn({
             abi: erc20abi,
             functionName: "approve",
             args: [contractAddress, approvePrice],
-        })
+        });
     }
     const transfer = () => {
         writeContract({
             address: contractAddress,
             abi,
-            functionName: "buyToken",
-            args: [tokenId],
+            functionName: "safeTransferFrom",
+            args: [TOKEN_CONTRACT_ADDRESS, buyerAddress, tokenId],
         });
+        setState({
+            open: true,
+            vertical: 'top',
+            horizontal: 'center'
+        });
+        SetErrorMessage("success");
     };
 
     const buyNFT = async () => {
@@ -100,18 +107,16 @@ export function MarketPriceBtn({
     }
 
     // confirm approval
-    const { isLoading: isConfirming, isSuccess: isConfirmed } =
-        useWaitForTransactionReceipt({
-            hash,
-        });
+    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({hash});
 
     useEffect(() => {
-        if (!isSold) {
-            if (isConfirmed) {
-                transfer();
-                setIsSold(true);
-            }
-        }
+        if (isSold) {
+		} else {
+			if (isConfirmed) {
+				transfer();
+				setIsSold(true);
+			}
+		}
     }, [isConfirmed]);
 
     // check owner
@@ -134,20 +139,19 @@ export function MarketPriceBtn({
     return (
         <>
             {isPending ? (
-                <button className="nft-buy-button" disabled>
+                <Button variant="outlined" className="nft-buy-button" disabled>
                     Loading... | Buy
-                </button>
+                </Button>
             ) :
-                displayPrice === '0 USDC' ? (<button className="nft-buy-button">
+                displayPrice === `0 ${symbol}` ? (<Button className="nft-buy-button">
                     Not for sale
-                </button>) : (<button className="nft-buy-button" onClick={buyNFT}>
-                    {
-                        isConfirming
-                            ? "Confirming..."
+                </Button>) : isConfirming
+                            ? (<Button sx={{bgcolor: "rgba(129, 199, 132, 0.5)", borderColor: green[300], color: green[300], cursor: 'wait'}} variant="outlined" className="nft-buy-button">...Confirming</Button>)
                             : isConfirmed
-                                ? "Confirmed"
-                                : `${displayPrice} | Buy`}
-                </button >)
+                                ? (<Button sx={{bgcolor: "rgba(76, 175, 80, 0.5)", borderColor: green[500], color: green[500], cursor: 'wait'}} variant="outlined" className="nft-buy-button" >Confirmed</Button>)
+                                : isSold 
+                                    ? (<Button sx={{bgcolor: "rgba(77, 208, 225, 0.5)", borderColor: cyan[300], color: cyan[300], cursor: 'not-allowed'}} variant="outlined" className="nft-buy-button" >Sold!</Button>)
+                                    : (<Button sx={{borderColor: cyan[800], color: cyan[800]}} variant="outlined" className="nft-buy-button" onClick={buyNFT}>{`${displayPrice} | Buy`}</Button>)
             }
 
             {

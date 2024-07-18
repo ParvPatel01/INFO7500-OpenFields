@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import GrassIcon from '@mui/icons-material/Grass';
 import { useNavigate } from 'react-router-dom';
+import cyan from '@mui/material/colors/cyan';
 
 const pages = ['Market', 'Mint'];
 
@@ -19,6 +20,10 @@ function Header(props: any) {
     const routeChange = (path: string) => {
         if (path === 'Market') {
             navigate(path, {state: {address: props.account.address}});
+            return;
+        }
+        if (path === 'Mint') {
+            navigate(path, {state: {status: props.account.status}});
             return;
         }
         navigate(path);
@@ -33,7 +38,7 @@ function Header(props: any) {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" sx={{bgcolor: cyan[800]}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <GrassIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -41,7 +46,7 @@ function Header(props: any) {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -96,7 +101,7 @@ function Header(props: any) {
                         variant="h5"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
