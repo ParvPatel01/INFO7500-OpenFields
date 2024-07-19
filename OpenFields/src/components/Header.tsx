@@ -23,7 +23,7 @@ function Header(props: any) {
             return;
         }
         if (path === 'Mint') {
-            navigate(path, {state: {status: props.account.status}});
+            navigate(path, {state: {status: props.account.status, address: props.account.address}});
             return;
         }
         navigate(path);

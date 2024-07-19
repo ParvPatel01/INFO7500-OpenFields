@@ -4,8 +4,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { WagmiProvider } from 'wagmi'
 import {RouterProvider} from 'react-router-dom';
-
-import App from './App.tsx'
 import { config } from './wagmi.ts'
 
 import './index.css'
