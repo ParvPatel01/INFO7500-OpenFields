@@ -141,6 +141,7 @@ export function MarketPriceBtn({
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+            console.log("owner is" ,data);
             return data;
         } catch (error) {
             console.error('There was a problem with your fetch operation:', error);
@@ -159,7 +160,7 @@ export function MarketPriceBtn({
                 </Button>) : isConfirming
                             ? (<Button sx={{bgcolor: "rgba(129, 199, 132, 0.5)", borderColor: green[300], color: green[300], cursor: 'wait'}} variant="outlined" className="nft-buy-button">...Confirming</Button>)
                             : isConfirmed
-                                ? (<Button sx={{bgcolor: "rgba(76, 175, 80, 0.5)", borderColor: green[500], color: green[500], cursor: 'wait'}} variant="outlined" className="nft-buy-button" >Confirmed</Button>)
+                                ? (<Button sx={{bgcolor: "rgba(76, 175, 80, 0.5)", borderColor: green[500], color: green[500], cursor: 'wait'}} variant="outlined" className="nft-buy-button" onClick={()=>{fetchNFTOwner()}} >Confirmed</Button>)
                                 : isSold 
                                     ? (<Button sx={{bgcolor: "rgba(77, 208, 225, 0.5)", borderColor: cyan[300], color: cyan[300], cursor: 'not-allowed'}} variant="outlined" className="nft-buy-button" onClick={() => {fetchNFTOwner()}} >Sold!</Button>)
                                     : (<Button sx={{borderColor: cyan[800], color: cyan[800]}} variant="outlined" className="nft-buy-button" onClick={buyNFT}>{`${displayPrice} | Buy`}</Button>)
