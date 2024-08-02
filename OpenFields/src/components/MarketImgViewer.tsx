@@ -26,28 +26,26 @@ export default function MarketImgViewer(props: any) {
     <Box >
       <ImageList cols={4} gap={8}>
         {props.nft.map((item: NFT) => (
-          <>
 
-            <ImageListItem sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              mt: '1em',
-            }} key={item.tokenId}>
-              {item.imgUrl === undefined ? <div>Image not found</div> : <img onClick={() => handleClickOpen(item.imgUrl)}
-                style={{ height: '15em', width: '15em', borderRadius: '10px' }}
-                src={item.imgUrl}
-                alt={item.name}
-                loading="lazy"
-              />}
-              <ImageListItemBar position="below" sx={{ fontSize: '2em', fontWeight: 800 }} title={`${item.name} #${item.tokenId}`} />
-              {
-                props.isMarket &&
-                <MarketPriceBtn tokenId={item.tokenId} contractAddress={props.contractAddress} buyerAddress={props.buyerAddress} />
-              }
-            </ImageListItem>
-          </>
+          <ImageListItem sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mt: '1em',
+          }} key={item.tokenId}>
+            {item.imgUrl === undefined ? <div>Image not found</div> : <img onClick={() => handleClickOpen(item.imgUrl)}
+              style={{ height: '15em', width: '15em', borderRadius: '10px' }}
+              src={item.imgUrl}
+              alt={item.name}
+              loading="lazy"
+            />}
+            <ImageListItemBar position="below" sx={{ fontSize: '2em', fontWeight: 800 }} title={`${item.name} #${item.tokenId}`} />
+            {
+              props.isMarket &&
+              <MarketPriceBtn tokenId={item.tokenId} contractAddress={props.contractAddress} buyerAddress={props.buyerAddress} />
+            }
+          </ImageListItem>
         ))}
       </ImageList>
       <Dialog open={open} onClose={handleClose} sx={{ width: "100%", height: "100%", borderRadius: 'none' }}>

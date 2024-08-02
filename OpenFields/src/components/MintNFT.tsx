@@ -27,7 +27,7 @@ export function MintNFT({ address }: Props) {
 
         writeContract({
             address: TOKEN_CONTRACT_ADDRESS,
-            abi,
+            abi: abi,
             functionName: 'mint',
             args: [address, tokenId, tokenURI],
         })

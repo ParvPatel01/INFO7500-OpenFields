@@ -39,6 +39,7 @@ export function MarketPriceBtn({
 
     // if is sold
     const [isSold, setIsSold] = useState(false);
+    const [owner, setOwner] = useState<string>('');
 
     // error alert
     const [state, setState] = React.useState<State>({
@@ -64,17 +65,27 @@ export function MarketPriceBtn({
     const approve = () => {
         writeContract({
             address: TOKEN_CONTRACT_ADDRESS,
-            abi: erc20abi,
+            abi: abi,
             functionName: "approve",
-            args: [contractAddress, approvePrice],
+            args: [contractAddress, tokenId],
         });
     }
+
     const transfer = () => {
+        if (owner === buyerAddress) {
+            setState({
+                open: true,
+                vertical: 'top',
+                horizontal: 'center'
+            });
+            SetErrorMessage("error occurred: owner is buyer");
+            return;
+        }
         writeContract({
             address: contractAddress,
-            abi,
-            functionName: "safeTransferFrom",
-            args: [TOKEN_CONTRACT_ADDRESS, buyerAddress, tokenId],
+            abi: abi,
+            functionName: "transferOwnership",
+            args: [owner],
         });
         setState({
             open: true,
@@ -86,7 +97,8 @@ export function MarketPriceBtn({
 
     const buyNFT = async () => {
         const data = await fetchNFTOwner();
-        if (data.owners[0] !== buyerAddress) {
+        setOwner(data.owners[0]);
+        if (owner === buyerAddress) {
             setState({
                 open: true,
                 vertical: 'top',
@@ -150,7 +162,7 @@ export function MarketPriceBtn({
                             : isConfirmed
                                 ? (<Button sx={{bgcolor: "rgba(76, 175, 80, 0.5)", borderColor: green[500], color: green[500], cursor: 'wait'}} variant="outlined" className="nft-buy-button" >Confirmed</Button>)
                                 : isSold 
-                                    ? (<Button sx={{bgcolor: "rgba(77, 208, 225, 0.5)", borderColor: cyan[300], color: cyan[300], cursor: 'not-allowed'}} variant="outlined" className="nft-buy-button" >Sold!</Button>)
+                                    ? (<Button sx={{bgcolor: "rgba(77, 208, 225, 0.5)", borderColor: cyan[300], color: cyan[300], cursor: 'not-allowed'}} variant="outlined" className="nft-buy-button" onClick={() => {fetchNFTOwner()}} >Sold!</Button>)
                                     : (<Button sx={{borderColor: cyan[800], color: cyan[800]}} variant="outlined" className="nft-buy-button" onClick={buyNFT}>{`${displayPrice} | Buy`}</Button>)
             }
 
