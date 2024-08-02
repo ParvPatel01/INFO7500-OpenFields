@@ -13,7 +13,6 @@ const Market = () => {
     const [nfts, setNfts] = useState<NFT[]>([]);
     const location = useLocation();
     const buyerAddress: string = location.state.address;
-    const [senderAddress, setSenderAddress] = useState<string>('');
 
     useEffect(() => {
         fetch(`https://eth-sepolia.g.alchemy.com/nft/v3/${ALCHEMY_API_KEY}/getNFTsForContract?contractAddress=${CONTRACT_ADDRESS}&withMetadata=true`, options)

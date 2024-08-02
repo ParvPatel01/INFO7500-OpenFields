@@ -4,7 +4,6 @@ import {
     useWriteContract,
 } from "wagmi";
 import abi from "../ABIs/ContractABI_V3.json";
-import erc20abi from "../ABIs/ERC20ABI.json";
 import { useEffect, useState } from "react";
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import React from "react";
@@ -51,7 +50,7 @@ export function MarketPriceBtn({
     const [errorMessage, SetErrorMessage] = useState("");
 
     const displayPrice = `1 ${symbol}`;
-    const approvePrice = `${('0' + 0n).toString()}000000000000000000`;
+    // const approvePrice = `${('0' + 0n).toString()}000000000000000000`;
 
     // if (isPending) return <div>Loading...</div>;
 
