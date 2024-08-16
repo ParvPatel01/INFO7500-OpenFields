@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useEffect } from 'react';
 import {
     useReadContract,
     useWaitForTransactionReceipt,
@@ -35,7 +34,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function Profile(props: ProfileProps) {
     const CONTRACT_ADDRESS = "0xC5143a2451fA6986Bf7Fb7bF1Ac468C6d9d6A43f";
-    const TOKEN_CONTRACT_ADDRESS = "0x49fBFE1517b34D9eFd01F9e37A9400B2e00AA376";
 
     const { data: hash, writeContract } = useWriteContract();
     const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({hash});
@@ -49,7 +47,7 @@ export default function Profile(props: ProfileProps) {
         setOpen(false);
     };
     const { account, connectors, connect, profileError, disconnect } = props;
-    const {data: balanceData, error, isPending} = useReadContract({
+    const {data: balanceData} = useReadContract({
         address: CONTRACT_ADDRESS,
         abi,
         functionName: "balanceOf",

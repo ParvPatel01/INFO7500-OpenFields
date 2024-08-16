@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       <Header account={account} />
-      <Profile account={account} connectors={connectors} connect={connect} error={error} disconnect={disconnect} />
+      <Profile account={account} connectors={connectors} connect={connect} profileError={error} disconnect={disconnect} />
       <Outlet />
     </>
   )
