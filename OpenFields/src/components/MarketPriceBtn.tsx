@@ -9,7 +9,7 @@ import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import React from "react";
 import { cyan, green } from '@mui/material/colors';
 import { Button } from "@mui/material";
-const TOKEN_CONTRACT_ADDRESS = "0x49fBFE1517b34D9eFd01F9e37A9400B2e00AA376";
+const CONTRACT_ADDRESS = "0xC5143a2451fA6986Bf7Fb7bF1Ac468C6d9d6A43f";
 
 interface Props {
     tokenId: string;
@@ -63,7 +63,7 @@ export function MarketPriceBtn({
 
     const approve = () => {
         writeContract({
-            address: TOKEN_CONTRACT_ADDRESS,
+            address: CONTRACT_ADDRESS,
             abi: abi,
             functionName: "approve",
             args: [contractAddress, tokenId],
@@ -81,7 +81,7 @@ export function MarketPriceBtn({
             return;
         }
         writeContract({
-            address: contractAddress,
+            address: CONTRACT_ADDRESS,
             abi: abi,
             functionName: "transferOwnership",
             args: [owner],

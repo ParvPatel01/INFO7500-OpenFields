@@ -1,4 +1,11 @@
 import * as React from 'react';
+import { useEffect } from 'react';
+import {
+    useReadContract,
+    useWaitForTransactionReceipt,
+    useWriteContract,
+} from "wagmi";
+import abi from "../ABIs/ContractABI_V3.json";
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -13,7 +20,7 @@ interface ProfileProps {
     account: any;
     connectors: any;
     connect: any;
-    error: any;
+    profileError: any;
     disconnect: any;
 }
 
@@ -27,6 +34,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function Profile(props: ProfileProps) {
+    const CONTRACT_ADDRESS = "0xC5143a2451fA6986Bf7Fb7bF1Ac468C6d9d6A43f";
+    const TOKEN_CONTRACT_ADDRESS = "0x49fBFE1517b34D9eFd01F9e37A9400B2e00AA376";
+
+    const { data: hash, writeContract } = useWriteContract();
+    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({hash});
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -35,11 +48,37 @@ export default function Profile(props: ProfileProps) {
     const handleClose = () => {
         setOpen(false);
     };
-    const { account, connectors, connect, error, disconnect } = props;
+    const { account, connectors, connect, profileError, disconnect } = props;
+    const {data: balanceData, error, isPending} = useReadContract({
+        address: CONTRACT_ADDRESS,
+        abi,
+        functionName: "balanceOf",
+        args: [account.address],
+    });
+
+    
+    const approve = () => {
+        writeContract({
+            address: CONTRACT_ADDRESS,
+            abi: abi,
+            functionName: "approve",
+            args: [account.address, 1],
+        });
+    }
+
+    const transfer = () => {
+        console.log('transfer');
+        writeContract({
+            address: CONTRACT_ADDRESS,
+            abi: abi,
+            functionName: "transferFrom",
+            args: [account.address, account.address, 1],
+        });
+    }
 
     return (
         <React.Fragment>
-            <Box sx={{ m: 2, flexGrow: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}} onClick={handleClickOpen}>
+            <Box sx={{ m: 2, flexGrow: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={handleClickOpen}>
                 <Avatar sx={{ width: '8em', height: '3em', borderRadius: 1, bgcolor: cyan[800], cursor: 'pointer' }}>
                     <PersonIcon />
                 </Avatar>
@@ -73,12 +112,28 @@ export default function Profile(props: ProfileProps) {
                                 addresses: {JSON.stringify(account.addresses)}
                                 <br />
                                 chainId: {account.chainId}
+                                <br />
+                                balance: {balanceData && balanceData.toString()}
                             </div>
 
                             {account.status === 'connected' && (
-                                <button className="disconnect" type="button" onClick={() => disconnect()}>
-                                    Disconnect
-                                </button>
+                                <div>
+                                    <button className="disconnect" type="button" onClick={() => disconnect()}>
+                                        Disconnect
+                                    </button>
+                                    <button className='transfer' type='button' onClick={() => {approve() }}>
+                                        Approve
+                                    </button>
+                                    {hash && <div>Transaction Hash: {hash}</div>}
+                                    {isConfirming && <div>Waiting for confirmation...</div>}
+                                    {isConfirmed && 
+                                        <div>
+                                            Transaction confirmed. 
+                                            <button className='transfer' type='button' onClick={() => {transfer()}}>
+                                                Transfer
+                                            </button>    
+                                        </div>}
+                                </ div>
                             )}
                         </div>
 
@@ -95,7 +150,7 @@ export default function Profile(props: ProfileProps) {
                                 </button>
                             ))}
                             {/* <div>{status}</div> */}
-                            <div>{error?.message}</div>
+                            <div>{profileError?.message}</div>
                         </div>}
                     </div>
                 </DialogContent>
